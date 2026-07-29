@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Goodsoil | Find real food near you</title>
+    <meta
+      name="description"
+      content="Goodsoil helps people discover trusted farms, butchers, dairies, and farm shops selling direct to the public."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root,
+      body[data-theme="light"] {
+        --bg: #f4f4f2;
+        --bg-soft: #ececea;
+        --panel: rgba(255, 255, 255, 0.78);
+        --panel-strong: #ffffff;
+        --ink: #080808;
+        --ink-soft: rgba(8, 8, 8, 0.68);
+        --muted: rgba(8, 8, 8, 0.5);
+        --line: rgba(8, 8, 8, 0.1);
+        --line-strong: rgba(8, 8, 8, 0.16);
+        --shadow: 0 20px 60px rgba(16, 16, 16, 0.06);
+        --section-dark: #090909;
+        --section-dark-soft: #121212;
+        --section-dark-ink: #f6f6f3;
+        --section-dark-muted: rgba(246, 246, 243, 0.68);
+        --button-bg: #0d0d0d;
+        --button-ink: #f8f8f5;
+        --ghost-bg: rgba(8, 8, 8, 0.04);
+        --ghost-ink: #080808;
+        --toggle-bg: rgba(8, 8, 8, 0.04);
+        --toggle-border: rgba(8, 8, 8, 0.12);
+        --toggle-pill: #0d0d0d;
+        --toggle-pill-ink: #f8f8f5;
+        --accent-spectrum: linear-gradient(90deg, #4e7bff 0%, #15c97e 38%, #ff7a45 70%, #9a59ff 100%);
+        --accent-glow: rgba(78, 123, 255, 0.16);
+        --surface: linear-gradient(180deg, #0e0e0f 0%, #171719 100%);
+        --surface-strong: rgba(255, 255, 255, 0.05);
+        --surface-ink: #f5f5f2;
+        --surface-ink-soft: rgba(245, 245, 242, 0.72);
+        --surface-line: rgba(245, 245, 242, 0.12);
+        --max: 1240px;
+      }
+
+      body[data-theme="dark"] {
+        --bg: #050505;
+        --bg-soft: #0c0c0d;
+        --panel: rgba(255, 255, 255, 0.04);
+        --panel-strong: rgba(255, 255, 255, 0.06);
+        --ink: #f5f5f3;
+        --ink-soft: rgba(245, 245, 243, 0.72);
+        --muted: rgba(245, 245, 243, 0.5);
+        --line: rgba(255, 255, 255, 0.12);
+        --line-strong: rgba(255, 255, 255, 0.18);
+        --shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+        --section-dark: #090909;
+        --section-dark-soft: #121212;
+        --section-dark-ink: #f6f6f3;
+        --section-dark-muted: rgba(246, 246, 243, 0.68);
+        --button-bg: #f8f8f5;
+        --button-ink: #0d0d0d;
+        --ghost-bg: rgba(255, 255, 255, 0.04);
+        --ghost-ink: #f5f5f3;
+        --toggle-bg: rgba(255, 255, 255, 0.04);
+        --toggle-border: rgba(255, 255, 255, 0.12);
+        --toggle-pill: #f8f8f5;
+        --toggle-pill-ink: #0d0d0d;
+        --accent-spectrum: linear-gradient(90deg, #5be7ff 0%, #7cff6b 36%, #ff5fd2 70%, #ffbd59 100%);
+        --accent-glow: rgba(91, 231, 255, 0.14);
+        --surface: linear-gradient(180deg, #090909 0%, #121212 100%);
+        --surface-strong: rgba(255, 255, 255, 0.06);
+        --surface-ink: #f6f6f3;
+        --surface-ink-soft: rgba(246, 246, 243, 0.68);
+        --surface-line: rgba(246, 246, 243, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Manrope", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at top center, rgba(255, 255, 255, 0.6), transparent 24%),
+          linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
+        transition: background 0.35s ease, color 0.35s ease;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.28;
+        background-image:
+          linear-gradient(var(--line) 1px, transparent 1px),
+          linear-gradient(90deg, var(--line) 1px, transparent 1px);
+        background-size: 56px 56px;
+        mask-image: radial-gradient(circle at center, black 18%, transparent 82%);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .container {
+        width: min(calc(100% - 32px), var(--max));
+        margin: 0 auto;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        backdrop-filter: blur(18px);
+        background: color-mix(in srgb, var(--bg) 76%, transparent);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .topbar-inner {
+        min-height: 82px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .brand-mark {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 1px solid var(--line-strong);
+        background: var(--panel-strong);
+        display: grid;
+        place-items: center;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.03);
+        font-size: 14px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+      }
+
+      .brand-copy {
+        display: grid;
+        gap: 2px;
+      }
+
+      .brand-copy strong,
+      .eyebrow,
+      .mini-label,
+      .footer-kicker,
+      .section-label,
+      .metric-label,
+      .card-kicker {
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+      }
+
+      .brand-copy strong,
+      .brand-copy span {
+        font-size: 12px;
+      }
+
+      .brand-copy span,
+      .nav,
+      .eyebrow,
+      .section-label {
+        color: var(--ink-soft);
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        font-size: 14px;
+      }
+
+      .nav a:hover,
+      .nav a:focus-visible {
+        color: var(--ink);
+      }
+
+      .theme-toggle {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 4px;
+        border-radius: 999px;
+        border: 1px solid var(--toggle-border);
+        background: var(--toggle-bg);
+      }
+
+      .theme-toggle::after {
+        content: "";
+        position: absolute;
+        left: 8px;
+        right: 8px;
+        bottom: 4px;
+        height: 2px;
+        border-radius: 999px;
+        background: var(--accent-spectrum);
+        opacity: 0.95;
+      }
+
+      .theme-option {
+        position: relative;
+        z-index: 1;
+        min-width: 72px;
+        padding: 10px 14px;
+        border: 0;
+        background: transparent;
+        color: var(--ink-soft);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .theme-option.is-active {
+        color: var(--toggle-pill-ink);
+      }
+
+      .theme-indicator {
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: calc(50% - 4px);
+        height: calc(100% - 8px);
+        border-radius: 999px;
+        background: var(--toggle-pill);
+        transition: transform 0.25s ease;
+      }
+
+      body[data-theme="dark"] .theme-indicator {
+        transform: translateX(100%);
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 50px;
+        padding: 0 22px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 700;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .button:hover,
+      .button:focus-visible {
+        transform: translateY(-1px);
+      }
+
+      .button-primary {
+        position: relative;
+        overflow: hidden;
+        background: var(--button-bg);
+        color: var(--button-ink);
+        box-shadow: var(--shadow);
+      }
+
+      .button-primary::after {
+        content: "";
+        position: absolute;
+        left: 14px;
+        right: 14px;
+        bottom: 6px;
+        height: 3px;
+        border-radius: 999px;
+        background: var(--accent-spectrum);
+      }
+
+      .button-secondary {
+        border: 1px solid var(--line-strong);
+        background: var(--ghost-bg);
+        color: var(--ghost-ink);
+      }
+
+      .section {
+        padding: 22px 0;
+      }
+
+      .hero {
+        padding: 34px 0 18px;
+      }
+
+      .hero-grid,
+      .story-grid,
+      .proof-grid,
+      .producer-grid {
+        display: grid;
+        gap: 18px;
+      }
+
+      .hero-grid,
+      .producer-grid {
+        grid-template-columns: 1.16fr 0.84fr;
+      }
+
+      .story-grid,
+      .proof-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .panel,
+      .dark-card,
+      .story-card,
+      .proof-card,
+      .category-card,
+      .route-card,
+      .producer-card,
+      .cta-panel {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 30px;
+        background: var(--panel);
+        box-shadow: var(--shadow);
+      }
+
+      .panel::before,
+      .dark-card::before,
+      .story-card::before,
+      .proof-card::before,
+      .category-card::before,
+      .route-card::before,
+      .producer-card::before,
+      .cta-panel::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 24%);
+      }
+
+      .panel::after,
+      .dark-card::after,
+      .story-card::after,
+      .proof-card::after,
+      .category-card::after,
+      .route-card::after,
+      .producer-card::after,
+      .cta-panel::after {
+        content: "";
+        position: absolute;
+        left: 18px;
+        right: 18px;
+        bottom: 12px;
+        height: 3px;
+        border-radius: 999px;
+        background: var(--accent-spectrum);
+      }
+
+      .hero-copy {
+        padding: 46px;
+        min-height: 680px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .eyebrow,
+      .section-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 16px;
+        font-size: 11px;
+      }
+
+      .eyebrow::before,
+      .section-label::before {
+        content: "";
+        width: 42px;
+        height: 1px;
+        background: var(--accent-spectrum);
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        max-width: 9ch;
+        margin-bottom: 22px;
+        font-size: clamp(4.4rem, 12vw, 7.6rem);
+        line-height: 0.9;
+        letter-spacing: -0.06em;
+        font-weight: 800;
+      }
+
+      h1 em {
+        font-style: normal;
+        opacity: 0.72;
+      }
+
+      .hero-lead,
+      .section-header p,
+      .story-card p,
+      .proof-card p,
+      .producer-card p,
+      .cta-panel p {
+        color: var(--ink-soft);
+      }
+
+      .hero-lead {
+        max-width: 680px;
+        font-size: 20px;
+        line-height: 1.78;
+      }
+
+      .hero-actions,
+      .pill-row,
+      .category-grid,
+      .metrics,
+      .route-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .hero-actions {
+        margin-top: 30px;
+      }
+
+      .hero-notes {
+        display: grid;
+        gap: 14px;
+        margin-top: 34px;
+      }
+
+      .note-row {
+        display: grid;
+        grid-template-columns: 128px 1fr;
+        gap: 18px;
+        padding-top: 16px;
+        border-top: 1px solid var(--line);
+      }
+
+      .note-row strong,
+      .list-row strong,
+      .metric-label,
+      .card-kicker {
+        font-size: 12px;
+      }
+
+      .hero-stage {
+        display: grid;
+        gap: 18px;
+      }
+
+      .dark-card {
+        min-height: 680px;
+        padding: 36px;
+        background: var(--surface);
+        color: var(--surface-ink);
+        border-color: color-mix(in srgb, var(--surface-ink) 12%, transparent);
+      }
+
+      .pill {
+        position: relative;
+        overflow: hidden;
+        padding: 10px 14px;
+        border-radius: 999px;
+        border: 1px solid color-mix(in srgb, var(--surface-ink) 12%, transparent);
+        background: var(--surface-strong);
+        color: var(--surface-ink-soft);
+        font-size: 11px;
+      }
+
+      .pill::after {
+        content: "";
+        position: absolute;
+        left: 10px;
+        right: 10px;
+        bottom: 5px;
+        height: 2px;
+        border-radius: 999px;
+        background: var(--accent-spectrum);
+      }
+
+      .stage-title {
+        max-width: 11ch;
+        margin-bottom: 18px;
+        font-size: clamp(2.5rem, 5.2vw, 3.8rem);
+        line-height: 0.95;
+        letter-spacing: -0.05em;
+        font-weight: 800;
+      }
+
+      .stage-copy {
+        max-width: 460px;
+        font-size: 16px;
+        line-height: 1.72;
+        color: var(--surface-ink-soft);
+      }
+
+      .search-shell {
+        position: relative;
+        overflow: hidden;
+        margin-top: 32px;
+        padding: 18px;
+        border-radius: 28px;
+        border: 1px solid color-mix(in srgb, var(--surface-ink) 12%, transparent);
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .search-shell::after {
+        content: "";
+        position: absolute;
+        inset: auto 18px 10px;
+        height: 3px;
+        border-radius: 999px;
+        background: var(--accent-spectrum);
+      }
+
+      .search-bar {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr auto;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+
+      .search-bar input {
+        min-height: 54px;
+        border: 1px solid color-mix(in srgb, var(--surface-ink) 12%, transparent);
+        border-radius: 18px;
+        padding: 0 16px;
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--surface-ink);
+      }
+
+      .search-bar button {
+        min-height: 54px;
+        border: 0;
+        border-radius: 18px;
+        padding: 0 18px;
+        font-weight: 700;
+        background: var(--surface-ink);
+        color: #0a0a0a;
+      }
+
+      .route-grid {
+        gap: 10px;
+      }
+
+      .route-card {
+        flex: 1 1 220px;
+        min-width: 0;
+        padding: 18px;
+        background: rgba(255, 255, 255, 0.04);
+        border-color: color-mix(in srgb, var(--surface-ink) 12%, transparent);
+      }
+
+      .route-card h3 {
+        margin-bottom: 10px;
+        font-size: 18px;
+      }
+
+      .route-card p {
+        margin-bottom: 0;
+        line-height: 1.55;
+        color: var(--surface-ink-soft);
+      }
+
+      .section-header {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+
+      .section-header h2 {
+        margin-bottom: 10px;
+        font-size: clamp(2.5rem, 6vw, 4.2rem);
+        line-height: 0.95;
+        letter-spacing: -0.05em;
+        font-weight: 800;
+      }
+
+      .story-card,
+      .proof-card,
+      .producer-card,
+      .cta-panel {
+        padding: 30px;
+      }
+
+      .list-grid {
+        display: grid;
+        gap: 12px;
+        margin-top: 22px;
+      }
+
+      .list-row {
+        display: grid;
+        grid-template-columns: 116px 1fr;
+        gap: 16px;
+        padding-top: 16px;
+        border-top: 1px solid var(--line);
+      }
+
+      .category-grid {
+        margin-top: 26px;
+      }
+
+      .category-card {
+        flex: 1 1 180px;
+        min-width: 0;
+        padding: 22px 22px 28px;
+      }
+
+      .category-card h3 {
+        margin-bottom: 10px;
+        font-size: 22px;
+        letter-spacing: -0.03em;
+      }
+
+      .category-card p {
+        margin-bottom: 0;
+        color: var(--ink-soft);
+        line-height: 1.65;
+      }
+
+      .metric-grid {
+        display: grid;
+        gap: 12px;
+        margin-top: 26px;
+      }
+
+      .metric {
+        position: relative;
+        overflow: hidden;
+        padding: 16px 16px 22px;
+        border-radius: 22px;
+        border: 1px solid color-mix(in srgb, var(--surface-ink) 12%, transparent);
+        background: var(--surface-strong);
+      }
+
+      .metric::after {
+        content: "";
+        position: absolute;
+        left: 14px;
+        right: 14px;
+        bottom: 8px;
+        height: 3px;
+        border-radius: 999px;
+        background: var(--accent-spectrum);
+      }
+
+      .metric strong {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 28px;
+        color: var(--surface-ink);
+      }
+
+      .metric p {
+        margin-bottom: 0;
+        color: var(--surface-ink-soft);
+        line-height: 1.58;
+      }
+
+      .producer-card h3,
+      .cta-panel h2 {
+        font-size: clamp(2rem, 4vw, 3.2rem);
+        letter-spacing: -0.05em;
+        line-height: 0.95;
+      }
+
+      .stats-row {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .stat-block {
+        padding-top: 18px;
+        border-top: 1px solid var(--line);
+      }
+
+      .stat-block strong {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 34px;
+        letter-spacing: -0.04em;
+      }
+
+      .stat-block span {
+        color: var(--ink-soft);
+      }
+
+      .cta-panel {
+        text-align: center;
+        padding: 46px 30px 54px;
+      }
+
+      .cta-panel .hero-actions {
+        justify-content: center;
+      }
+
+      footer {
+        padding: 18px 0 42px;
+      }
+
+      .footer-shell {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding-top: 18px;
+        border-top: 1px solid var(--line);
+      }
+
+      .footer-copy {
+        color: var(--ink-soft);
+        line-height: 1.7;
+      }
+
+      @media (max-width: 1080px) {
+        .hero-grid,
+        .story-grid,
+        .proof-grid,
+        .producer-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .dark-card,
+        .hero-copy {
+          min-height: auto;
+        }
+
+        .search-bar {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 760px) {
+        .topbar-inner,
+        .footer-shell,
+        .section-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .nav {
+          display: none;
+        }
+
+        .hero-copy,
+        .dark-card,
+        .story-card,
+        .proof-card,
+        .producer-card,
+        .cta-panel {
+          padding: 24px;
+        }
+
+        h1 {
+          font-size: clamp(3.4rem, 20vw, 5rem);
+        }
+
+        .stats-row {
+          grid-template-columns: 1fr;
+        }
+
+        .note-row,
+        .list-row {
+          grid-template-columns: 1fr;
+          gap: 8px;
+        }
+      }
+    </style>
+  </head>
+  <body data-theme="light">
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <a class="brand" href="#top" aria-label="Goodsoil home">
+          <div class="brand-mark">FG</div>
+          <div class="brand-copy">
+            <strong>Goodsoil</strong>
+            <span>Direct food. Better source.</span>
+          </div>
+        </a>
+
+        <nav class="nav">
+          <a href="#why">Why now</a>
+          <a href="#how">How it works</a>
+          <a href="#producers">For producers</a>
+          <a href="#launch">Launch region</a>
+          <a class="button button-secondary" href="#cta">Get early access</a>
+        </nav>
+
+        <div class="theme-toggle" aria-label="Theme toggle">
+          <div class="theme-indicator"></div>
+          <button class="theme-option is-active" data-theme-target="light">Light</button>
+          <button class="theme-option" data-theme-target="dark">Dark</button>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero section">
+        <div class="container hero-grid">
+          <article class="panel hero-copy">
+            <div>
+              <span class="eyebrow">Greater Manchester / Cheshire / Lancashire</span>
+              <h1>Find <em>real food</em> near you.</h1>
+              <p class="hero-lead">
+                Discover farms, butchers, dairies, and farm shops selling direct to the
+                public. Better meat. Better eggs. Better vegetables. Clearer source.
+              </p>
+              <div class="hero-actions">
+                <a class="button button-primary" href="#cta">Get early access</a>
+                <a class="button button-secondary" href="#how">See the concept</a>
+              </div>
+            </div>
+
+            <div class="hero-notes">
+              <div class="note-row">
+                <strong class="metric-label">Search</strong>
+                <span>Grass-fed beef, raw honey, farm eggs, raw milk, seasonal veg.</span>
+              </div>
+              <div class="note-row">
+                <strong class="metric-label">Trust</strong>
+                <span>Provenance, opening times, farming methods, verified producer details.</span>
+              </div>
+              <div class="note-row">
+                <strong class="metric-label">Intent</strong>
+                <span>Reserve, contact, route-plan, or order without the directory sludge.</span>
+              </div>
+            </div>
+          </article>
+
+          <aside class="dark-card hero-stage">
+            <div class="pill-row">
+              <span class="pill">Open now</span>
+              <span class="pill">Available this week</span>
+              <span class="pill">Reserve & collect</span>
+            </div>
+
+            <div>
+              <span class="eyebrow">Consumer-first discovery</span>
+              <h2 class="stage-title">Start with what you want to eat.</h2>
+              <p class="stage-copy">
+                Not a taxonomical maze. Not a clunky farm directory. A premium local-food
+                product built around search, trust, and actual buying intent.
+              </p>
+            </div>
+
+            <div class="search-shell">
+              <div class="search-bar">
+                <input value="Raw honey, eggs, grass-fed beef" aria-label="search products" />
+                <input value="Manchester" aria-label="search location" />
+                <button>Search</button>
+              </div>
+
+              <div class="route-grid">
+                <article class="route-card">
+                  <span class="card-kicker">14 min away</span>
+                  <h3>Willow Bank Farm</h3>
+                  <p>Pasture-raised eggs, raw honey, collection Friday to Sunday.</p>
+                </article>
+                <article class="route-card">
+                  <span class="card-kicker">Open now</span>
+                  <h3>North Ridge Butchery</h3>
+                  <p>Grass-fed beef boxes, marrow bones, reserve before 2pm.</p>
+                </article>
+                <article class="route-card">
+                  <span class="card-kicker">This week</span>
+                  <h3>Oakwell Dairy</h3>
+                  <p>Yoghurt, cream, farmhouse butter, raw milk where legally sold.</p>
+                </article>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section" id="why">
+        <div class="container">
+          <div class="section-header">
+            <div>
+              <span class="section-label">Why this matters</span>
+              <h2>The local-food market is real. The product experience is not.</h2>
+            </div>
+            <p>
+              Consumers want provenance, quality, and trust. Producers exist. Demand exists.
+              Discovery is still fragmented, old, and weirdly hard.
+            </p>
+          </div>
+
+          <div class="story-grid">
+            <article class="story-card">
+              <span class="card-kicker">Consumer shift</span>
+              <h3>People want proof, not vague packaging claims.</h3>
+              <p>
+                The rise of provenance, farm shops, butchers, Clarkson’s Farm, and premium
+                ingredient culture points to a wider change: people want to know where food
+                actually came from and whether it is worth paying more for.
+              </p>
+              <div class="list-grid">
+                <div class="list-row">
+                  <strong>Trust</strong>
+                  <span>Clear source beats anonymous supermarket abstraction.</span>
+                </div>
+                <div class="list-row">
+                  <strong>Taste</strong>
+                  <span>Better produce, meat, dairy, and eggs make the extra effort feel worth it.</span>
+                </div>
+                <div class="list-row">
+                  <strong>Status</strong>
+                  <span>Local food is becoming culturally cooler, not just ethically worthy.</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="proof-card dark-card">
+              <span class="card-kicker">Current gap</span>
+              <h3 class="stage-title">What exists today still feels like homework.</h3>
+              <p class="stage-copy">
+                Existing sites are directory-heavy, cluttered, and infrastructure-first. They
+                do not feel like premium food discovery products. They feel like admin.
+              </p>
+              <div class="metric-grid">
+                <div class="metric">
+                  <strong>Better search</strong>
+                  <p>Product-first discovery instead of category mazes.</p>
+                </div>
+                <div class="metric">
+                  <strong>Better trust</strong>
+                  <p>Standards, provenance, availability, and producer proof up front.</p>
+                </div>
+                <div class="metric">
+                  <strong>Better action</strong>
+                  <p>Reserve, contact, route-plan, or order without friction.</p>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="how">
+        <div class="container">
+          <div class="section-header">
+            <div>
+              <span class="section-label">How it works</span>
+              <h2>Built around buying intent, not browsing fatigue.</h2>
+            </div>
+            <p>
+              The wedge is simple: make it ridiculously easy to discover trusted local food
+              that is actually available and worth the trip.
+            </p>
+          </div>
+
+          <div class="category-grid">
+            <article class="category-card">
+              <span class="card-kicker">1</span>
+              <h3>Search by product</h3>
+              <p>Start with eggs, raw honey, grass-fed beef, veg boxes, dairy, fruit, or farm shops.</p>
+            </article>
+            <article class="category-card">
+              <span class="card-kicker">2</span>
+              <h3>Filter by reality</h3>
+              <p>Open now. Available this week. Pickup. Delivery. Distance. Farming method.</p>
+            </article>
+            <article class="category-card">
+              <span class="card-kicker">3</span>
+              <h3>Trust fast</h3>
+              <p>See producer story, product standards, seasonal windows, and local proof in seconds.</p>
+            </article>
+            <article class="category-card">
+              <span class="card-kicker">4</span>
+              <h3>Act cleanly</h3>
+              <p>Reserve, WhatsApp, call, route-plan, or order without falling into a bad directory hole.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="launch">
+        <div class="container proof-grid">
+          <article class="proof-card dark-card">
+            <span class="section-label">Launch wedge</span>
+            <h2 class="stage-title">Dense local supply beats a thin national map.</h2>
+            <p class="stage-copy">
+              Start tight. Win one region. Make the product feel alive. Greater Manchester,
+              Cheshire, and Lancashire are enough for a real first version.
+            </p>
+            <div class="pill-row">
+              <span class="pill">Greater Manchester</span>
+              <span class="pill">Cheshire</span>
+              <span class="pill">Lancashire</span>
+            </div>
+          </article>
+
+          <article class="story-card">
+            <span class="card-kicker">Best first categories</span>
+            <h3>Lead with what people already care enough to travel for.</h3>
+            <div class="list-grid">
+              <div class="list-row">
+                <strong>Meat</strong>
+                <span>Grass-fed beef, lamb, chicken, butcher boxes, specialty cuts.</span>
+              </div>
+              <div class="list-row">
+                <strong>Dairy</strong>
+                <span>Milk, butter, yoghurt, cream, cheese, and raw milk where legally sold.</span>
+              </div>
+              <div class="list-row">
+                <strong>Eggs</strong>
+                <span>Farm eggs are one of the clearest habit-change categories.</span>
+              </div>
+              <div class="list-row">
+                <strong>Veg + honey</strong>
+                <span>Seasonal produce, veg boxes, orchard fruit, honey, preserves, pantry goods.</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="producers">
+        <div class="container producer-grid">
+          <article class="producer-card">
+            <span class="section-label">For consumers</span>
+            <h3>Buy better food without detective work.</h3>
+            <p>
+              A premium mobile-first consumer product that turns local food discovery into
+              something fast, credible, and desirable.
+            </p>
+            <div class="stats-row">
+              <div class="stat-block">
+                <strong>Open now</strong>
+                <span>Know whether the trip is worth making.</span>
+              </div>
+              <div class="stat-block">
+                <strong>This week</strong>
+                <span>See what is actually available right now.</span>
+              </div>
+              <div class="stat-block">
+                <strong>Direct</strong>
+                <span>Reserve or contact without unnecessary friction.</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="producer-card">
+            <span class="section-label">For producers</span>
+            <h3>Sell direct without being buried in a bad directory.</h3>
+            <p>
+              Better presentation, clearer demand capture, and a much stronger consumer-facing
+              experience than the out-of-date category sites that exist now.
+            </p>
+            <div class="list-grid">
+              <div class="list-row">
+                <strong>Visibility</strong>
+                <span>Product-led listings that help people find what they actually want.</span>
+              </div>
+              <div class="list-row">
+                <strong>Control</strong>
+                <span>Availability, opening times, categories, collection windows, and proof signals.</span>
+              </div>
+              <div class="list-row">
+                <strong>Intent</strong>
+                <span>Higher quality leads than passive directory traffic.</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="cta">
+        <div class="container">
+          <article class="cta-panel">
+            <span class="section-label">Early access</span>
+            <h2>Better food. Direct from the source.</h2>
+            <p>
+              Join the early list for the first premium local-food discovery product built for
+              consumers, not directories.
+            </p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="mailto:anders@beyondculture.io?subject=Field%20Good%20Interest">Get early access</a>
+              <a class="button button-secondary" href="mailto:anders@beyondculture.io?subject=Field%20Good%20Producer%20Interest">I run a farm or shop</a>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-shell">
+        <div>
+          <span class="footer-kicker">Goodsoil</span>
+          <p class="footer-copy">Concept landing page using the current Beyond Culture visual system.</p>
+        </div>
+        <div class="footer-copy">Manchester-first. Trust-heavy. Consumer-first.</div>
+      </div>
+    </footer>
+
+    <script>
+      const body = document.body;
+      const buttons = document.querySelectorAll(".theme-option");
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const nextTheme = button.dataset.themeTarget;
+          body.dataset.theme = nextTheme;
+          buttons.forEach((item) => item.classList.toggle("is-active", item === button));
+        });
+      });
+    </script>
+  </body>
+</html>
